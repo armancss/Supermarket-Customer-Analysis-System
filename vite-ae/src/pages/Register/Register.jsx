@@ -1,15 +1,38 @@
 import React, { useState } from "react";
 import "../Cam_Feed/Cam_Feed.scss"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import validation from "./RegistrationValidation";
+import axios from 'axios';
+
 export const Register = (props) => {
+    const [values,setValues]= useState({
+        name: '',
+        email:'',
+        password:''
+    })
+    const navigate= useNavigate();
+    const [errors, setErrors]= useState([])
+    const handleInput= (e) => {
+        setValues(prev => ({...prev, [e.target.name]: [e.target.value]}))
+    }
+    const handleSubmit= (e) => {
+        e.preventDefault();
+        const err= validation(values);
+        setErrors(err);
+        if(err.name === "" && err.email === "" && err .password === "" ) {
+            axios.post('http://localhost:8081/signup', values )
+            .then( res => {
+                navigate('/');
+            })
+            .catch(err => console.log(err))
+        }
+
+}
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
     const [name, setName] = useState('');
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(email);
-    }
+   
 
     return (
         <div className="wrapper-login">
@@ -18,16 +41,18 @@ export const Register = (props) => {
                 <h2 className="title__h2">Register</h2>
                 <form className="register-form" onSubmit={handleSubmit}>
                     <label htmlFor="name">Full Name:</label>
-                    <input value={name} name="name" onChange={(e) => setName(e.target.value)} id="name" placeholder="Full Name" />
+                    <input type="text" name="name" onChange={(handleInput)} id="name" placeholder="Full Name" />
+                    { errors.name && <span className= "text-danger"> {errors.name} </span>}
 
                     <label htmlFor="email">Email:</label>
-                    <input value={email} onChange={(e) => setEmail(e.target.value)}type="email" placeholder="youremail@gmail.com" id="email" name="email" />
+                    <input  type="email" onChange={(handleInput)} placeholder="youremail@gmail.com" id="email" name="email" />
+                    { errors.email && <span className= "text-danger"> {errors.email} </span>}
+                    
                     <label htmlFor="password">Password:</label>
-                    <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" placeholder="********" id="password" name="password" />
+                    <input type="password"  onChange={(handleInput)}  placeholder="********" id="password" name="password" />
+                    { errors.password && <span className= "text-danger"> {errors.password} </span>}
                 
-                    <Link to="/" className="button">
-                        <span>Register</span>
-                    </Link>
+                    <button type='submit' className='button'> Sign up</button>
                 </form>
             <Link to="/">
                 <button className="link-btn">Already have an account? Login here.</button>

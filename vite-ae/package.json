@@ -1,5 +1,5 @@
 {
-  "homepage": "https://armancss.github.io/supermarket_customer_analysis",
+  "homepage": "http://armancss.github.io/https://github.com/Supermarket-Customer-Analysis-System",
   "name": "vite-ae",
   "private": true,
   "version": "0.0.0",
@@ -10,13 +10,20 @@
     "deploy": "gh-pages -d dist",
     "build": "vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "nodemon server.js"
   },
   "dependencies": {
+    "axios": "^1.4.0",
+    "bootstrap": "^5.3.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
     "face-api.js": "^0.22.2",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.11.2",
+    "react-router-dom": "^6.12.1",
     "sass": "^1.62.1"
   },
   "devDependencies": {

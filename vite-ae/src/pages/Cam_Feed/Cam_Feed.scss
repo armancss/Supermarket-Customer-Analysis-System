@@ -13,6 +13,7 @@ body {
 
 }
 
+
 .appvideo{
     display: flex;
     align-items: top;
@@ -222,4 +223,10 @@ margin: 0;
 
 .main-title {
   color: #fff;
+}
+
+.text-danger{
+  color: red;
+  font-size: x-small;
+  text-align: center;
 }

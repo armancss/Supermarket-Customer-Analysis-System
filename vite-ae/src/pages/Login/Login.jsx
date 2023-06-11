@@ -1,14 +1,43 @@
 import React, { useState } from "react";
 import "../Cam_Feed/Cam_Feed.scss"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import validation from "./LoginValidation";
+import axios from 'axios';
 export const Login = (props) => {
     const [email , setEmail]= useState('');
     const [pass, setPass]= useState('');
-    const handleSubmit= (e) => {
-              e.preventDefault();
-              console.log(email);
-
+    const [values,setValues]= useState({
+        email:'',
+        password:''
+    })
+    const navigate = useNavigate();
+    const [errors, setErrors]= useState([])
+    const handleInput= (e) => {
+        setValues(prev => ({...prev, [e.target.name]: [e.target.value]}))
     }
+    const handleSubmit= (e) => {
+        e.preventDefault();
+        const err = validation(values);
+        setErrors(err);
+        if(err.email === "" && err.password === "" ) {
+            axios.post('http://localhost:8081/login', values )
+            .then( res => {
+                if(res.data === "Success"){
+
+                
+                navigate('/cam');
+
+                }
+                else {
+                    alert("No record existed");
+                }
+            })
+            .catch(err=> console.log(err))
+        }
+
+}
+    
+
     return(
         <>
         <div className="wrapper-login">
@@ -17,13 +46,13 @@ export const Login = (props) => {
                 <h2 className="title__h2">Login</h2>
             <form className="login-form" onSubmit={(handleSubmit)}>
                 <label htmlFor="email">Email</label>
-                <input value={email} onChange={(e)=> setEmail(e.target.value)} type="email" placeholder="youremail@gmail.com" id="email" name="email"/>
+                <input onChange={(handleInput)} type="email" placeholder="youremail@gmail.com" id="email" name="email"/>
+                { errors.email && <span className= "text-danger"> {errors.email} </span>}
 
                 <label htmlFor="password">Password</label>
-                <input value={pass} onChange={(e)=> setPass(e.target.value)} type="password" placeholder="********" id="password" name="password"/>  
-                <Link to="/cam" className="button button__green">
-                    <span>Log In</span>
-                </Link>
+                <input  onChange={(handleInput)} type="password" placeholder="********" id="password" name="password"/>  
+                { errors.password && <span className= "text-danger"> {errors.password} </span>}
+                <button type='submit' className='button'> Log in</button> 
             </form>
             <Link to="/register" className="button">
                 <span>Register</span>
